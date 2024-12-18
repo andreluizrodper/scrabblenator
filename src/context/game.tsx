@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { getLetters } from "@/pages/api/game";
+import { doValidateWord, getLetters } from "@/pages/api/game";
 
 export type Letter = {
   letra: string;
@@ -90,9 +90,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const validateWord = useCallback(async () => {
     const word = selectedLetters.map((letter: Letter) => letter.letra).join("");
-    const isValid = await fetch(`https://dicio.com.br/${word}`)
-      .then((res) => res.status === 200)
-      .catch(() => false);
+    const isValid = await doValidateWord(word);
     if (isValid) {
       const score = selectedLetters
         .map((letter: Letter) => letter.pontos)
